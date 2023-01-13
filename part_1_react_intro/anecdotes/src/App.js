@@ -12,14 +12,34 @@ const Anecdote = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
   ]
-   
+  
   const [selected, setSelected] = useState(0)
-  const generateRandIndex = () => Math.floor(Math.random() * anecdotes.length)
-  const handleNextClick = () => setSelected(generateRandIndex());
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+
+  const handleNextClick = () => {
+    const randomIndex = Math.floor(Math.random() * anecdotes.length)
+    setSelected(randomIndex)
+  };
+
+  const handleVoteClick = () => {
+    const votesCopy = [...votes]
+    votesCopy[selected] += 1 
+    setVotes(votesCopy)
+    // console.log('vote!')
+    // console.log(selected)
+
+    // votes[selected] += 1
+    // setSelected(selected); 
+    // const currentVotes = votes[selected]
+    // votes = [...votes]
+    // votes[selected] = currentVotes + 1
+    // setSelected(votes)
+  }
 
   return (
     <>
-      <p>{anecdotes[selected]}</p>
+      <p>{anecdotes[selected]} <br/> has {votes[selected]} votes</p>
+      <Button text={'vote'} handleClick={handleVoteClick}/>
       <Button text={'next anecdote'} handleClick={handleNextClick}/>
     </>
   )
