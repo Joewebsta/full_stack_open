@@ -2,7 +2,14 @@ import { useState } from 'react'
 
 const Header = ({text}) => <h1>{text}</h1>
 const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
-const StatisticLine = ({text, value, symbol}) => <div>{text} {value}{symbol}</div>
+const StatisticLine = ({text, value, symbol}) => {
+  return (
+    <tr>
+    <td>{text}</td>
+    <td>{value}{symbol}</td>
+  </tr>
+  )
+}
 
 const Statistics = ({good, neutral, bad}) => {
   let all = good + bad + neutral
@@ -12,14 +19,16 @@ const Statistics = ({good, neutral, bad}) => {
   if (all === 0) return <div>No feedback given</div>
 
   return (
-    <div>
-      <StatisticLine text={'good'} value={good}/>
-      <StatisticLine text={'neutral'} value={neutral}/>
-      <StatisticLine text={'bad'} value={bad}/>
-      <StatisticLine text={'all'} value={all}/>
-      <StatisticLine text={'average'} value={average}/>
-      <StatisticLine text={'positive'} value={positive} symbol={'%'}/>
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text={'good'} value={good}/>
+        <StatisticLine text={'neutral'} value={neutral}/>
+        <StatisticLine text={'bad'} value={bad}/>
+        <StatisticLine text={'all'} value={all}/>
+        <StatisticLine text={'average'} value={average}/>
+        <StatisticLine text={'positive'} value={positive} symbol={'%'}/>
+      </tbody>
+    </table>
   )
 }
 
