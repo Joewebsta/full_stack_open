@@ -6,12 +6,23 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault()
+
+    if (isInvalidName(newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
     setPersons(persons.concat({ name: newName }))
     setNewName('')
   }
 
   const handleNameChange = (e) => {
     setNewName(e.target.value)
+  }
+
+  const isInvalidName = (name) => {
+    const names = persons.map(person => person.name)
+    return names.includes(name);
   }
 
   return (
