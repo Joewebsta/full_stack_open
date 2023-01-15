@@ -4,6 +4,13 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '5555555555' }])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+  const nameRegex = new RegExp(searchTerm, 'i');
+  const peopleToShow = searchTerm === '' ? persons : persons.filter(person => nameRegex.test(person.name))
+
+  const handleNameChange = (e) => setNewName(e.target.value)
+  const handleNumberChange = e => setNewNumber(e.target.value)
+  const handleSearchTermChange = (e) => setSearchTerm(e.target.value)
 
   const addPerson = (e) => {
     e.preventDefault()
@@ -17,16 +24,15 @@ const App = () => {
       name: newName,
       number: newNumber,
     }))
+
     setNewName('')
     setNewNumber('')
   }
 
-  const handleNameChange = (e) => {
-    setNewName(e.target.value)
-  }
+  const displayPersons = () => {
+    if (peopleToShow.length === 0) return <p>There are no people to show.</p>
 
-  const handleNumberChange = e => {
-    setNewNumber(e.target.value)
+    return peopleToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)
   }
 
   const isInvalidName = (name) => {
@@ -37,6 +43,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <form>
+        filter shown with
+        <input type="text" onChange={handleSearchTermChange} />
+      </form>
+      <h2>Add a New</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
@@ -49,7 +60,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      {displayPersons()}
     </div>
   )
 }
