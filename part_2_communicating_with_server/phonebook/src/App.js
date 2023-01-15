@@ -1,7 +1,14 @@
 import { useState } from 'react'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
+import Persons from './components/Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '5555555555' }])
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+  ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -23,44 +30,31 @@ const App = () => {
     setPersons(persons.concat({
       name: newName,
       number: newNumber,
+      id: persons.length + 1,
     }))
 
     setNewName('')
     setNewNumber('')
   }
 
-  const displayPersons = () => {
-    if (peopleToShow.length === 0) return <p>There are no people to show.</p>
-
-    return peopleToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)
-  }
-
-  const isInvalidName = (name) => {
-    const names = persons.map(person => person.name)
-    return names.includes(name);
-  }
+  const isInvalidName = (name) => persons.map(person => person.name).includes(name)
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        filter shown with
-        <input type="text" onChange={handleSearchTermChange} />
-      </form>
+      <Filter onChange={handleSearchTermChange} />
+
       <h2>Add a New</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        onSubmit={addPerson}
+        onNameChange={handleNameChange}
+        onNumberChange={handleNumberChange}
+      />
+
       <h2>Numbers</h2>
-      {displayPersons()}
+      <Persons people={peopleToShow} />
     </div>
   )
 }
