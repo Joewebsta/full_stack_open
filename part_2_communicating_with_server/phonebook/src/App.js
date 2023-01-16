@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const nameRegex = new RegExp(searchTerm, 'i');
   const peopleToShow = searchTerm === '' ? persons : persons.filter(person => nameRegex.test(person.name))
+
+  useEffect(() => {
+    fetch('http://localhost:3001/persons')
+      .then(response => response.json())
+      .then(persons => setPersons(persons))
+  }, [])
 
   const handleNameChange = (e) => setNewName(e.target.value)
   const handleNumberChange = e => setNewNumber(e.target.value)
