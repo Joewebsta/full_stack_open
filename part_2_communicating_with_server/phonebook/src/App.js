@@ -36,11 +36,21 @@ const App = () => {
       number: newNumber,
     }
 
-    const returnedPerson = await phonebookService.update(personObject)
+    const returnedPerson = await phonebookService.create(personObject)
     setPersons(persons.concat(returnedPerson))
     setNewName('')
     setNewNumber('')
   }
+
+  const handleDeletePerson = async id => {
+    const  { name } = persons.find(person => person.id === id)
+
+    if (window.confirm(`Delete ${name}?`)) {
+      await phonebookService.destroy(id);
+      setPersons(persons.filter(person => person.id !== id))
+    }
+  }
+
 
   const isInvalidName = (name) => persons.map(person => person.name).includes(name)
 
@@ -59,7 +69,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons people={peopleToShow} />
+      <Persons people={peopleToShow} handleDelete={handleDeletePerson}/>
     </div>
   )
 }
