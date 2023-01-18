@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
+import phonebookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -13,8 +14,8 @@ const App = () => {
   const peopleToShow = searchTerm === '' ? persons : persons.filter(person => nameRegex.test(person.name))
 
   useEffect(() => {
-    fetch('http://localhost:3001/persons')
-      .then(response => response.json())
+    phonebookService
+      .getAll()
       .then(persons => setPersons(persons))
   }, [])
 
@@ -33,16 +34,9 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      // id: persons.length + 1,
     }
 
-    const response = await fetch('http://localhost:3001/persons', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(personObject)
-    })
-
-    const returnedPerson = await response.json();
+    const returnedPerson = await phonebookService.update(personObject)
     setPersons(persons.concat(returnedPerson))
     setNewName('')
     setNewNumber('')
