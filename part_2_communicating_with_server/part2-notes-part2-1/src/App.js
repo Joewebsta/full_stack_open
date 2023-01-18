@@ -21,18 +21,29 @@ const App = () => {
 
   console.log('render', notes.length, 'notes')
 
-  const addNote = (event) => {
+  const addNote = async (event) => {
     event.preventDefault()
 
     const noteObject = {
       content: newNote,
-      date: new Date().toISOString(),
       important: Math.random() < 0.5,
-      id: notes.length + 1,
     }
 
-    setNotes(notes.concat(noteObject))
-    setNewNote('')
+    const response = await fetch('http://localhost:3001/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+       body: JSON.stringify(noteObject)
+    })
+
+    const note = await response.json();
+
+    console.log(note);
+    
+
+    // setNotes(notes.concat(noteObject))
+    // setNewNote('')
   }
 
   const handleNoteChange = (event) => {
