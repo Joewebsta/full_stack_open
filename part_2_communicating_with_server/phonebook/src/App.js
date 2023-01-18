@@ -27,8 +27,15 @@ const App = () => {
     e.preventDefault()
 
     if (isInvalidName(newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
+      const message = `${newName} is already added to phonebook. Replace the old number with a new one?`
+      if (window.confirm(message)) {
+        updateNumber()
+      } else {
+        setNewName('')
+        setNewNumber('')
+      }
+
+      return 
     }
 
     const personObject = {
@@ -36,14 +43,24 @@ const App = () => {
       number: newNumber,
     }
 
-    const returnedPerson = await phonebookService.create(personObject)
-    setPersons(persons.concat(returnedPerson))
+    const responsePerson = await phonebookService.create(personObject)
+    setPersons(persons.concat(responsePerson))
     setNewName('')
     setNewNumber('')
   }
 
-  const handleDeletePerson = async id => {
-    const  { name } = persons.find(person => person.id === id)
+  const updateNumber = async () => {
+    const person = findPerson('name', newName)
+    const changedPerson = { ...person, number: newNumber}
+    const responsePerson = await phonebookService.update(person.id, changedPerson)
+    
+    setPersons(persons.map(p => (p.id !== person.id) ? p : responsePerson))
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const deletePerson = async id => {
+    const { name } = findPerson('id', id)
 
     if (window.confirm(`Delete ${name}?`)) {
       await phonebookService.destroy(id);
@@ -51,8 +68,8 @@ const App = () => {
     }
   }
 
-
   const isInvalidName = (name) => persons.map(person => person.name).includes(name)
+  const findPerson = (attribute, value) => persons.find(person => person[attribute] === value)
 
   return (
     <div>
@@ -69,7 +86,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons people={peopleToShow} handleDelete={handleDeletePerson}/>
+      <Persons people={peopleToShow} handleDelete={deletePerson}/>
     </div>
   )
 }

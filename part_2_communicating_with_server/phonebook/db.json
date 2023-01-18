@@ -1,18 +1,8 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
       "name": "Dan Abramov",
-      "number": "12-43-234345",
+      "number": "982498723",
       "id": 3
     },
     {
@@ -21,14 +11,9 @@
       "id": 4
     },
     {
-      "name": "Joe Webster",
+      "name": "Dan Abromov",
       "number": "6178240131",
-      "id": 5
-    },
-    {
-      "name": "Scott Webster",
-      "number": "6174274000",
-      "id": 6
+      "id": 7
     }
   ]
 }

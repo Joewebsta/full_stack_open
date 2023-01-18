@@ -20,4 +20,14 @@ const destroy = async id => {
   return response.json()
 }
 
-export default { getAll, create, destroy }
+const update = async (id, personObject) => {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(personObject)
+  })
+
+  return await response.json()
+}
+
+export default { create, getAll, update, destroy }
