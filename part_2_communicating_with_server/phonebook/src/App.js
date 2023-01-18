@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
@@ -21,7 +22,7 @@ const App = () => {
   const handleNumberChange = e => setNewNumber(e.target.value)
   const handleSearchTermChange = (e) => setSearchTerm(e.target.value)
 
-  const addPerson = (e) => {
+  const addPerson = async e => {
     e.preventDefault()
 
     if (isInvalidName(newName)) {
@@ -29,12 +30,20 @@ const App = () => {
       return
     }
 
-    setPersons(persons.concat({
+    const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
-    }))
+      // id: persons.length + 1,
+    }
 
+    const response = await fetch('http://localhost:3001/persons', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(personObject)
+    })
+
+    const returnedPerson = await response.json();
+    setPersons(persons.concat(returnedPerson))
     setNewName('')
     setNewNumber('')
   }
