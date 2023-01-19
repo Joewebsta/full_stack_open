@@ -1,66 +1,55 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
+import CountryDetail from './Components/CountryDetail'
 
 const App = () => {
   const [countryQuery, setCountryQuery] = useState('')
+  const [allCountries, setAllCountries] = useState([])
   const [countries, setCountries] = useState([])
 
-  const getCountries = async (countryText) => {
-    const response = await fetch('https://restcountries.com/v3.1/all')
-    const countries = await response.json();
-    const filteredCountries = countries
-      .map(country => {
-        return {
-          name: country.name.common,
-          capital: country.capital,
-          area: country.area,
-          languages: country.languages,
-          flag: country.flags.png
-        }
-      })
-      .filter(country => country.name.toLowerCase().includes(countryText.toLowerCase()))
-      .sort((a, b) => a.name > b.name ? 1 : -1)
+  useEffect(() => {
+    if (allCountries.length === 0) {
+      fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(allCountries => setAllCountries(processCountries(allCountries)))
+      return
+    }
 
-    setCountries(filteredCountries)
+    setCountries(allCountries.filter(country => country.name.toLowerCase().includes(countryQuery.toLowerCase())))
+  }, [countryQuery])
+
+  const handleOnChange = async e => {
+    const countryQuery = e.target.value
+    setCountryQuery(countryQuery)
+  }
+
+  const processCountries = countries => {
+    const processedCountries = countries.map(country => {
+      return {
+        name: country.name.common,
+        capital: country.capital,
+        area: country.area,
+        languages: country.languages,
+        flag: country.flags.png
+      }
+    })
+
+    return processedCountries.sort((a, b) => a.name > b.name ? 1 : -1)
   }
 
   const displayCountries = () => {
     if (countryQuery.length === 0) return
+    if (countries.length === 0) return <p>No countries found</p>
+    if (countries.length === 1) return <CountryDetail country={countries[0]} />
     if (countries.length > 10) return <p>Too many matches. Specify another filter</p>
 
-    if (countries.length === 1) {
-      const country = countries[0]
-
-      return (
-        <div>
-          <h1>{country.name}</h1>
-          <p>capital: {country.capital}</p>
-          <p>area: {country.area}</p>
-          <h3>languages</h3>
-          <ul>
-            {Object.values(country.languages).map((lang) => <li key={lang}>{lang}</li>)}
-          </ul>
-          <img src={country.flag} alt="" />
-        </div>
-      )
-
-    }
-
-    return (
-      countries.map(country => <p key={country.name}>{country.name}</p>)
-    )
-  }
-
-  const handleOnChange = async e => {
-    const countryText = e.target.value
-    await getCountries(countryText)
-    setCountryQuery(countryText)
+    return countries.map(country => <div key={country.name}>{country.name}</div>)
   }
 
   return (
     <>
       <form>
-        find countries: <input type="text" onChange={handleOnChange} value={countryQuery} />
+        find countries: <input onChange={handleOnChange} type="text" />
       </form>
       {displayCountries()}
     </>
