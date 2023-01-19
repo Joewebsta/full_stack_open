@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
 import CountryDetail from './Components/CountryDetail'
+import CountryList from './Components/CountryList'
 
 const App = () => {
   const [countryQuery, setCountryQuery] = useState('')
@@ -30,7 +31,8 @@ const App = () => {
         capital: country.capital,
         area: country.area,
         languages: country.languages,
-        flag: country.flags.png
+        flag: country.flags.png,
+        isVisible: false
       }
     })
 
@@ -43,7 +45,7 @@ const App = () => {
     if (countries.length === 1) return <CountryDetail country={countries[0]} />
     if (countries.length > 10) return <p>Too many matches. Specify another filter</p>
 
-    return countries.map(country => <div key={country.name}>{country.name}</div>)
+    return <CountryList countries={countries} setCountries={setCountries} />
   }
 
   return (
