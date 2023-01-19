@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import phonebookService from './services/phonebook'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
   const nameRegex = new RegExp(searchTerm, 'i');
   const peopleToShow = searchTerm === '' ? persons : persons.filter(person => nameRegex.test(person.name))
 
@@ -45,8 +47,11 @@ const App = () => {
 
     const responsePerson = await phonebookService.create(personObject)
     setPersons(persons.concat(responsePerson))
+    setSuccessMessage(`Added ${newName}`)
     setNewName('')
     setNewNumber('')
+
+    setTimeout(() => setSuccessMessage(null), 3000)
   }
 
   const updateNumber = async () => {
@@ -74,6 +79,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage}/>
       <Filter onChange={handleSearchTermChange} />
 
       <h2>Add a New</h2>
