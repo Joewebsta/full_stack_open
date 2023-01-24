@@ -43,6 +43,18 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const idArr = persons.map(person => person.id)
+  
+  if (idArr.includes(id)) {
+    persons = persons.filter(p => p.id !== id)
+    response.status(200).json({ message: "Person deleted successfully." })
+  } else {
+    response.status(404).json({ error: "Person could not be deleted."})
+  }
+})
+
 app.get('/info', (request, response) => {
   const info = `<p>Phonebook has info for ${persons.length} people<p><p>${new Date()}</p>`
   response.send(info)
