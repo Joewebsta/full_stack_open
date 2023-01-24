@@ -43,6 +43,24 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name) return response400(response, "Name missing")
+  if (!body.number) return response400(response, "Number missing")
+  if (isDuplicateName(body)) return response400(response, "Name must be unique")
+
+  const person = {
+    id: generateID(),
+    name: body.name,
+    number: body.number,
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const idArr = persons.map(person => person.id)
@@ -60,6 +78,18 @@ app.get('/info', (request, response) => {
   response.send(info)
 })
 
+const generateID = () => {
+  return Math.round(Math.random() * 999_999_999 + 1);
+}
+
+const isDuplicateName = ({ name }) => {
+  const namesArr = persons.map(person => person.name)
+  return namesArr.includes(name)
+}
+
+const response400 = (response, message) => {
+  response.status(400).json({error: message})
+}
 
 const PORT = 3001
 app.listen(PORT)
