@@ -34,19 +34,6 @@ app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(p => p.id === id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).json({
-      error: `Person with id ${id} cannot be found.`
-    })
-  }
-})
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -63,6 +50,19 @@ app.post('/api/persons', (request, response) => {
   persons = persons.concat(person)
 
   response.json(person)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(p => p.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).json({
+      error: `Person with id ${id} cannot be found.`
+    })
+  }
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -102,4 +102,6 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const PORT = 3001
-app.listen(PORT)
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`)
+})
