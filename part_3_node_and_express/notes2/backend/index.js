@@ -11,6 +11,10 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: 'malformatted id' })
   }
 
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+
   next(error)
 }
 
@@ -28,7 +32,7 @@ app.get('/api/notes', (req, res) => {
   })
 })
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   if (!body.content) {
@@ -43,6 +47,7 @@ app.post('/api/notes', (request, response) => {
   note.save().then(savedNote => {
     response.json(savedNote)
   })
+  .catch(error => next(error))
 })
 
 app.get('/api/notes/:id', async (request, response, next) => {
@@ -58,14 +63,13 @@ app.get('/api/notes/:id', async (request, response, next) => {
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
-  const body = request.body
+  const { content, important } = request.body
 
-  const note = {
-    content: body.content,
-    important: body.important,
-  }
-
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+  Note.findByIdAndUpdate(
+    request.params.id, 
+    { content, important },
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(updatedNote => response.json(updatedNote))
     .catch(error => next(error))
 })
