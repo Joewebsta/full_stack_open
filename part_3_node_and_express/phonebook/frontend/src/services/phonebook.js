@@ -16,8 +16,7 @@ const create = async person => {
 }
 
 const destroy = async id => {
-  const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' })
-  return response.json()
+  await fetch(`${baseUrl}/${id}`, { method: 'DELETE' })
 }
 
 const update = async (id, personObject) => {

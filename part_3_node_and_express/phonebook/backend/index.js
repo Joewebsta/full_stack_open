@@ -57,15 +57,30 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+    
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => { response.json(updatedPerson)})
+    .catch(error => next(error))
+})
+
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(() => response.status(200).end())
+    .then(() => response.status(204).end())
     .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
-  const info = `<p>Phonebook has info for ${persons.length} people<p><p>${new Date()}</p>`
-  response.send(info)
+  Person.find({}).then(persons => {
+    const info = `<p>Phonebook has info for ${persons.length} people<p><p>${new Date()}</p>`
+    response.send(info)
+  })
 })
 
 const isDuplicateName = ({ name }) => {

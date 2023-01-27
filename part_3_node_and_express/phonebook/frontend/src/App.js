@@ -37,7 +37,7 @@ const App = () => {
         setNewNumber('')
       }
 
-      return 
+      return
     }
 
     const personObject = {
@@ -56,9 +56,9 @@ const App = () => {
 
   const updateNumber = async () => {
     const person = findPerson('name', newName)
-    const changedPerson = { ...person, number: newNumber}
+    const changedPerson = { ...person, number: newNumber }
     const responsePerson = await phonebookService.update(person.id, changedPerson)
-    
+
     setPersons(persons.map(p => (p.id !== person.id) ? p : responsePerson))
     setNewName('')
     setNewNumber('')
@@ -79,7 +79,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage}/>
+      <Notification message={successMessage} />
       <Filter onChange={handleSearchTermChange} />
 
       <h2>Add a New</h2>
@@ -92,7 +92,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons people={peopleToShow} handleDelete={deletePerson}/>
+      <Persons people={peopleToShow} handleDelete={deletePerson} />
     </div>
   )
 }
