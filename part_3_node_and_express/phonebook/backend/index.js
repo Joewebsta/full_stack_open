@@ -7,6 +7,16 @@ const Person = require('./models/phonebook')
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 
+const errorHandler = (error, request, response, next) => {
+  console.log(error)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformed id' })
+  } 
+
+  next(error)
+}
+
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
@@ -35,23 +45,22 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
-      response.json(person)
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
     })
+    .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const idArr = persons.map(person => person.id)
-  
-  if (idArr.includes(id)) {
-    persons = persons.filter(p => p.id !== id)
-    response.status(200).json({ message: "Person deleted successfully." })
-  } else {
-    response.status(404).json({ error: "Person could not be deleted."})
-  }
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(() => response.status(200).end())
+    .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
@@ -71,6 +80,7 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
+app.use(errorHandler)
 app.use(unknownEndpoint)
 
 const PORT = process.env.PORT || 3001
