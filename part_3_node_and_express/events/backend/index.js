@@ -58,6 +58,23 @@ app.post('/api/events', (request, response) => {
   response.status(200).json(newEvent);
 });
 
+app.put('/api/events/:id', (request, response) => {
+  const { id } = request.params;
+  const event = events.find((e) => e.id === Number(id));
+
+  if (event) {
+    const newImportant = !event.important;
+    const updatedEvent = { ...event, important: newImportant };
+
+    events = events.map((e) => {
+      if (e.id === Number(id)) return updatedEvent;
+      return e;
+    });
+
+    response.json(updatedEvent);
+  }
+});
+
 app.delete('/api/events/:id', (request, response) => {
   const { id } = request.params;
 
