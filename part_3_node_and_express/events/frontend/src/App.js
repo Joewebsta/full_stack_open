@@ -1,36 +1,25 @@
-import { useState } from "react";
-import appEvents from "./event";
-
-const Events = ({ events, toggleImportant }) => {
-
-  const displayEvents = (events) => {
-    if (events.length === 0) return <p>No events</p>
-
-    return events.map(e => (
-      <li key={e.id}>
-        {e.name}
-        <button onClick={() => toggleImportant(e.id)}>{e.important ? 'make not important' : 'make important'}</button>
-      </li>
-    ))
-  }
-
-  return displayEvents(events)
-}
-
-const Footer = () => {
-  return <p>Made by Joe Webster 2023</p>
-}
+import React from "react";
+import { useState, useEffect } from "react";
+import Events from "./components/events"
+import Footer from "./components/footer"
+import eventService from "./services/event";
 
 const App = () => {
-  const [events, setEvents] = useState(appEvents);
+  const [events, setEvents] = useState([]);
   const [eventText, setEventText] = useState('');
-  const [showAll, setShowAll] = useState('');
+  const [showAll, setShowAll] = useState(true);
+
+  useEffect(() => {
+    eventService
+      .getAll()
+      .then(events => setEvents(events))
+  }, [])
 
   const handleEventChange = (e) => {
     setEventText(e.target.value);
   }
 
-  const createEvent = (e) => {
+  const createEvent = async (e) => {
     e.preventDefault();
 
     const newEvent = {
@@ -39,18 +28,20 @@ const App = () => {
       important: false,
     }
 
-    setEvents(events.concat(newEvent));
+    const returnedEvent = await eventService.create(newEvent);
+    setEvents(events.concat(returnedEvent));
     setEventText('');
   }
 
-  const toggleImportant = (id) => {
+  const toggleImportant = async (id) => {
     const event = events.find(e => e.id === id);
     const updatedEvent = { ...event, important: !event.important };
-    const updatedEvents = events.map(e => e.id === id ? updatedEvent : e);
+    const returnedEvent = await eventService.update(id, updatedEvent);
+    const updatedEvents = events.map(e => e.id === id ? returnedEvent : e);
     setEvents(updatedEvents);
   }
 
-  const eventsToShow = showAll ? events : events.filter(e => e.important)
+  const eventsToShow = showAll ? events : events.filter(e => e.important);
 
   return (
     <>
