@@ -1,40 +1,41 @@
 import { useState } from "react";
-
-const displayEvents = (events) => {
-  if (events.length === 0) return <p>No events</p>
-
-  return events.map(e => (
-    <li key={e.id}>
-      {e.name}
-      <button>{e.important ? 'make not important' : 'make important'}</button>
-    </li>
-  ))
-}
+import appEvents from "./event";
 
 const Footer = () => {
   return <p>Made by Joe Webster 2023</p>
 }
 
 const App = () => {
-  let appEvents = [
-    {
-      id: 1,
-      name: 'Harvard Museum of Natural History',
-      important: false,
-    },
-    {
-      id: 2,
-      name: 'New Years Eve',
-      important: false,
-    },
-    {
-      id: 3,
-      name: 'Ricky\'s Miami Bachelor Party',
-      important: false,
-    },
-  ];
+  let [events, setEvents] = useState(appEvents);
+  let [eventText, setEventText] = useState('');
 
-  const [events, setEvents] = useState(appEvents);
+  const displayEvents = (events) => {
+    if (events.length === 0) return <p>No events</p>
+
+    return events.map(e => (
+      <li key={e.id}>
+        {e.name}
+        <button>{e.important ? 'make not important' : 'make important'}</button>
+      </li>
+    ))
+  }
+
+  const handleEventChange = (e) => {
+    setEventText(e.target.value);
+  }
+
+  const createEvent = (e) => {
+    e.preventDefault();
+
+    const newEvent = {
+      id: events.length + 1,
+      name: eventText,
+      important: false,
+    }
+
+    setEvents(events.concat(newEvent));
+    setEventText('');
+  }
 
   return (
     <>
@@ -43,6 +44,10 @@ const App = () => {
       <ul>
         {displayEvents(events)}
       </ul>
+      <form action="" onSubmit={createEvent}>
+        <input type="text" name="event" value={eventText} onChange={handleEventChange} />
+        <button>save</button>
+      </form>
       <Footer />
     </>
   );
