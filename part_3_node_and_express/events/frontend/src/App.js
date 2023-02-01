@@ -9,7 +9,7 @@ const Events = ({ events, toggleImportant }) => {
     return events.map(e => (
       <li key={e.id}>
         {e.name}
-        <button onClick={toggleImportant(e.id)}>{e.important ? 'make not important' : 'make important'}</button>
+        <button onClick={() => toggleImportant(e.id)}>{e.important ? 'make not important' : 'make important'}</button>
       </li>
     ))
   }
@@ -22,8 +22,9 @@ const Footer = () => {
 }
 
 const App = () => {
-  let [events, setEvents] = useState(appEvents);
-  let [eventText, setEventText] = useState('');
+  const [events, setEvents] = useState(appEvents);
+  const [eventText, setEventText] = useState('');
+  const [showAll, setShowAll] = useState('');
 
   const handleEventChange = (e) => {
     setEventText(e.target.value);
@@ -43,20 +44,19 @@ const App = () => {
   }
 
   const toggleImportant = (id) => {
-    return () => {
-
-      const event = events.find(e => e.id === id);
-      const updatedEvent = { ...event, important: !event.important };
-      const updatedEvents = events.map(e => e.id === id ? updatedEvent : e);
-      setEvents(updatedEvents);
-    }
+    const event = events.find(e => e.id === id);
+    const updatedEvent = { ...event, important: !event.important };
+    const updatedEvents = events.map(e => e.id === id ? updatedEvent : e);
+    setEvents(updatedEvents);
   }
+
+  const eventsToShow = showAll ? events : events.filter(e => e.important)
 
   return (
     <>
       <h1>Events app</h1>
-      <button>show important</button>
-      <Events events={events} toggleImportant={toggleImportant} />
+      <button onClick={() => setShowAll(!showAll)}>show {showAll ? 'important' : 'all'}</button>
+      <Events events={eventsToShow} toggleImportant={toggleImportant} />
       <form action="" onSubmit={createEvent}>
         <input type="text" name="event" value={eventText} onChange={handleEventChange} />
         <button>save</button>
