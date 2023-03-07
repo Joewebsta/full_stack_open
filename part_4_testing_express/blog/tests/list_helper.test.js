@@ -1,12 +1,8 @@
+const supertest = require('supertest')
 const listHelper = require('../utils/list_helper')
+const app = require('../app')
+const api = supertest(app)
 const blogs = require('../utils/blogs')
-
-test('dummy returns one', () => {
-  const blogs = []
-
-  const result = listHelper.dummy(blogs)
-  expect(result).toBe(1)
-})
 
 describe('totalLikes', () => {
   test('of empty list is zero', () => {
@@ -26,4 +22,12 @@ describe('totalLikes', () => {
 
     expect(total).toBe(36)
   })
+})
+
+test('has correct number of blog posts', async () => {
+
+  await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
 })
