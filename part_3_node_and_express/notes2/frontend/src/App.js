@@ -26,6 +26,7 @@ const App = () => {
       important: Math.random() < 0.5,
     }
 
+
     const note = await noteService.create(noteObject)
     setNotes(notes.concat(note))
     setNewNote('')
@@ -52,6 +53,10 @@ const App = () => {
 
     try {
       const user = await loginService.login({ username, password })
+      console.log(user);
+
+
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
