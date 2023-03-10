@@ -13,7 +13,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
 
   const noteFormRef = useRef()
 
@@ -71,7 +70,7 @@ const App = () => {
       //   setErrorMessage(null)
       // }, 5000)
     }
-    console.log('logging in with', username, password);
+    console.log('logging in with', username, password)
   }
 
   return (
@@ -121,4 +120,4 @@ const App = () => {
   )
 }
 
-export default App 
+export default App

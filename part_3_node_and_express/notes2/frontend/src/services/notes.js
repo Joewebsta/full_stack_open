@@ -33,7 +33,7 @@ const update = async (id, newObject) => {
     body: JSON.stringify(newObject)
   })
 
-  return await response.json();
+  return await response.json()
 }
 
 export default { getAll, create, update, setToken }
