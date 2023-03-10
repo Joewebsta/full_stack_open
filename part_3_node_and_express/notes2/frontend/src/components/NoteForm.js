@@ -1,12 +1,29 @@
 import React from "react"
+import { useState } from 'react'
 
-const NoteForm = ({ onSubmit, handleChange, value }) => {
+const NoteForm = ({ createNote }) => {
+  const [newNote, setNewNote] = useState('')
+
+  const addNote = async (event) => {
+    event.preventDefault()
+
+    const noteObject = {
+      content: newNote,
+      important: true
+    }
+
+    createNote(noteObject)
+    // const note = await noteService.create(noteObject)
+    // setNotes(notes.concat(note))
+    setNewNote('')
+  }
+
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={addNote}>
         <input
-          value={value}
-          onChange={handleChange}
+          value={newNote}
+          onChange={event => setNewNote(event.target.value)}
         />
         <button type="submit">save</button>
       </form>

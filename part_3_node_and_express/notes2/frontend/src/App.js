@@ -9,7 +9,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -31,23 +30,12 @@ const App = () => {
     }
   }, [])
 
-  const addNote = async (event) => {
-    event.preventDefault()
+  const addNote = async (noteObject) => {
 
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-
-
-    const note = await noteService.create(noteObject)
-    setNotes(notes.concat(note))
-    setNewNote('')
+    const returnedNote = await noteService.create(noteObject)
+    setNotes(notes.concat(returnedNote))
   }
 
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
-  }
 
   const toggleImportanceOf = async id => {
     const note = notes.find(n => n.id === id)
@@ -83,42 +71,6 @@ const App = () => {
     }
     console.log('logging in with', username, password);
   }
-
-
-
-  // const noteForm = () => (
-  //   <form onSubmit={addNote}>
-  //     <input
-  //       value={newNote}
-  //       onChange={handleNoteChange}
-  //     />
-  //     <button type="submit">save</button>
-  //   </form>
-  // )
-
-  // const loginForm = () => {
-  //   const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-  //   const showWhenVisible = { display: loginVisible ? '' : 'none' }
-
-  //   return (
-  //     <div>
-  //       <div style={hideWhenVisible}>
-  //         <button onClick={() => setLoginVisible(true)}>log in</button>
-  //       </div>
-  //       <div style={showWhenVisible}>
-  //         <LoginForm
-  //           username={username}
-  //           password={password}
-  //           handleUsernameChange={({ target }) => setUsername(target.value)}
-  //           handlePasswordChange={({ target }) => setPassword(target.value)}
-  //           handleSubmit={handleLogin}
-  //         />
-  //         <button onClick={() => setLoginVisible(false)}>cancel</button>
-  //       </div>
-  //     </div>
-  //   )
-  // }
-
 
   return (
     <div>
