@@ -12,7 +12,7 @@ const getAll = async () => {
 }
 
 const create = async newObject => {
-  const response = await fetch(sbaseUrl,
+  const response = await fetch(baseUrl,
     {
       method: 'POST',
       headers: {
