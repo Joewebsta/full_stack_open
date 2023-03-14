@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { createNote, toggleImportanceOf } from './reducers/noteReducer'
+import { useSelector, useDispatch } from 'react-redux'
 
-function App() {
+
+const Note = ({ content, important, handleClick }) => {
+  const status = important ? 'important' : ''
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <li onClick={handleClick}>
+      {content} <strong>{status}</strong>
+    </li>
+  )
 }
 
-export default App;
+const Notes = ({ notes, handleClick }) => {
+  return (
+    <ul>
+      {notes.map(note => (
+        <Note
+          key={note.id}
+          content={note.content}
+          important={note.important}
+          handleClick={() => handleClick(note.id)}
+        />)
+      )}
+    </ul>
+  )
+}
+
+const App = () => {
+  const dispatch = useDispatch()
+  const notes = useSelector(state => state)
+
+  const addNote = (e) => {
+    e.preventDefault()
+
+    const content = e.target.note.value
+    e.target.note.value = ''
+    dispatch(createNote(content))
+  }
+
+  const toggleImportance = id => {
+    dispatch(toggleImportanceOf(id))
+  }
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <form onSubmit={addNote}>
+        <input name="note" type="text" />
+        <button type="submit">Add</button>
+      </form>
+      <Notes notes={notes} handleClick={toggleImportance} />
+    </div>
+  )
+}
+
+export default App
