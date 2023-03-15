@@ -1,4 +1,17 @@
-const noteReducer = (state = [], action) => {
+const initialState = [
+  {
+    content: 'HTML is easy',
+    important: true,
+    id: 1
+  },
+  {
+    content: 'Browser can execute only Javascript',
+    important: false,
+    id: 2
+  }
+]
+
+const noteReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'NEW_NOTE':
       return [...state, action.payload]
