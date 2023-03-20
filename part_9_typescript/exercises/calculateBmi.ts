@@ -8,8 +8,5 @@ const calculateBmi = (height: number, weight: number) => {
   return 'Obese'
 }
 
-console.log(calculateBmi(180, 85))
-
-
-
-
+const [height, weight] = process.argv.slice(2).map(arg => Number(arg))
+console.log(calculateBmi(height, weight))
