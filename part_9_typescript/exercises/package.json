@@ -1,0 +1,11 @@
+{
+  "name": "exercises",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "calculateBmi": "node calculateBmi.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
