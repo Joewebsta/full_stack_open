@@ -8,5 +8,7 @@ const calculateBmi = (height: number, weight: number) => {
   return 'Obese'
 }
 
-const [height, weight] = process.argv.slice(2).map(arg => Number(arg))
-console.log(calculateBmi(height, weight))
+export default calculateBmi
+
+// const [height, weight] = process.argv.slice(2).map(arg => Number(arg))
+// console.log(calculateBmi(height, weight))
