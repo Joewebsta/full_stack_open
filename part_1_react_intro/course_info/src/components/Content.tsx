@@ -3,17 +3,19 @@ import { Course, ContentProps } from "../types";
 const Content = (props: ContentProps) => {
   const { courses } = props;
 
-  const coursesArray = courses.map((course: Course) => {
-    return (
-      <p key={course.id}>
-        {course.name}
-        {" "}
-        {course.totExercises}
-      </p>
-    );
-  })
+  const renderCourses = () => {
+    return courses.map((course: Course) => {
+      return (
+        <p key={course.id}>
+          {course.name}
+          {" "}
+          {course.totExercises}
+        </p>
+      );
+    })
+  }
 
-  return <div>{coursesArray}</div>
+  return <div>{renderCourses()}</div>
 }
 
 export default Content
