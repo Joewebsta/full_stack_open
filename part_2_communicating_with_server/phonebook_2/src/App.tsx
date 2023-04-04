@@ -35,13 +35,18 @@ const App = () => {
     setSearchQuery(e.target.value);
   }
 
-  const addPerson = (e: React.FormEvent<HTMLFormElement>) => {
+  const addPerson = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (isDuplicateName(newName)) {
       alert(`${newName} is already added to the phonebook`);
     } else {
-      setPersons(persons.concat({ name: newName, number: newNumber, id: persons.length + 1 }));
+      const response = await axios.post('http://localhost:3001/persons', {
+        name: newName,
+        number: newNumber
+      });
+
+      setPersons(persons.concat(response.data));
     }
 
     setNewName('');
