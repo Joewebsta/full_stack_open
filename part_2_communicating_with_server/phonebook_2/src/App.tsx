@@ -4,6 +4,7 @@ import { IPerson } from './styles'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import personService from './services/personService'
 
 const App = () => {
   const [persons, setPersons] = useState<IPerson[]>([])
@@ -12,14 +13,12 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data);
-      })
+
+    personService
+      .getAll()
+      .then(data => setPersons(data))
       .catch(error => {
-        console.log('error', error);
-        alert('something went wrong');
+        console.log('errors', error);
       })
   }, [])
 
@@ -35,18 +34,20 @@ const App = () => {
     setSearchQuery(e.target.value);
   }
 
+
   const addPerson = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (isDuplicateName(newName)) {
       alert(`${newName} is already added to the phonebook`);
     } else {
-      const response = await axios.post('http://localhost:3001/persons', {
-        name: newName,
-        number: newNumber
-      });
-
-      setPersons(persons.concat(response.data));
+      try {
+        personService
+          .create({ name: newName, number: newNumber })
+          .then(data => setPersons(persons.concat(data)));
+      } catch (error) {
+        console.log('Error: ', error);
+      }
     }
 
     setNewName('');
