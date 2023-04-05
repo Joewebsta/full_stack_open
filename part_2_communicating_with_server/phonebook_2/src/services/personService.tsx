@@ -1,10 +1,10 @@
 import axios from "axios";
-import { IPerson } from "../styles";
+import { INewPerson } from "../styles";
 
 const baseUrl = 'http://localhost:3001/persons'
 
 const personService = {
-  create: async (newPerson: IPerson) => {
+  create: async (newPerson: INewPerson) => {
     try {
       const response = await axios.post(baseUrl, newPerson);
       return response.data;
@@ -27,6 +27,16 @@ const personService = {
       await axios.delete(`${baseUrl}/${id}`)
     } catch (error) {
       console.log('Error: ', error);
+    }
+  },
+
+  update: async (id: number, name: string, number: string) => {
+    try {
+      const response = await axios.put(`${baseUrl}/${id}`, { name, number })
+      return response.data;
+    } catch (error) {
+      console.log(error);
+
     }
   }
 }

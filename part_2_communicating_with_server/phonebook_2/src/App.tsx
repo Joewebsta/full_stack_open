@@ -44,19 +44,16 @@ const App = () => {
     }
   }
 
-  const addPerson = async (e: React.FormEvent<HTMLFormElement>) => {
+  const addPerson = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (isDuplicateName(newName)) {
-      alert(`${newName} is already added to the phonebook`);
-    } else {
-      try {
-        personService
-          .create({ name: newName, number: newNumber })
-          .then(data => setPersons(persons.concat(data)));
-      } catch (error) {
-        console.log('Error: ', error);
+      const confirmMessage = `${newName} is already added to the phonebook, replace the old number with a new one?`;
+      if (window.confirm(confirmMessage)) {
+        updatePerson();
       }
+    } else {
+      createPerson();
     }
 
     setNewName('');
@@ -65,6 +62,31 @@ const App = () => {
 
   const isDuplicateName = (name: string) => {
     return persons.map(person => person.name).includes(name);
+  }
+
+  const createPerson = async () => {
+    try {
+      const newPerson = await personService.create({ name: newName, number: newNumber });
+      setPersons(persons.concat(newPerson));
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  }
+
+  const updatePerson = async () => {
+    try {
+      const person = persons.find(person => person.name === newName);
+      if (person) {
+        const { id } = person;
+        await personService.update(id, newName, newNumber);
+        const newPersons = persons.map(person => {
+          return person.name !== newName ? person : { ...person, number: newNumber };
+        })
+        setPersons(newPersons)
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
