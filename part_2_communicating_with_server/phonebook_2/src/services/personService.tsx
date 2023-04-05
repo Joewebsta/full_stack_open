@@ -20,6 +20,14 @@ const personService = {
     } catch (error) {
       console.log('error', error);
     }
+  },
+
+  delete: async (id: number) => {
+    try {
+      await axios.delete(`${baseUrl}/${id}`)
+    } catch (error) {
+      console.log('Error: ', error);
+    }
   }
 }
 
