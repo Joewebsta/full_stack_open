@@ -3,13 +3,16 @@ import { IPerson } from './styles'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personService from './services/personService'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState<IPerson[]>([])
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     personService
@@ -54,6 +57,8 @@ const App = () => {
       }
     } else {
       createPerson();
+      setSuccessMessage('Number added successfully!')
+      setTimeout(() => setSuccessMessage(null), 5000)
     }
 
     setNewName('');
@@ -89,9 +94,16 @@ const App = () => {
     }
   }
 
+  const headerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16
+  }
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2 style={headerStyle}>Phonebook</h2>
+      <Notification message={successMessage} />
       <Filter searchQuery={searchQuery} handleSearchQueryChange={handleSearchQueryChange} />
 
       <h2>Add New Person</h2>
