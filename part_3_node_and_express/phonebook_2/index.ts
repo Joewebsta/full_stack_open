@@ -41,9 +41,9 @@ const findPersonById = (id: number) => {
 
 app.get('/api/persons', (_req: Request, res: Response) => {
   res.json(persons);
-})
+});
 
-app.get('/api/persons/:id', (req:Request, res:Response) => {
+app.get('/api/persons/:id', (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id);
   const person = findPersonById(id);
   
@@ -56,17 +56,41 @@ app.get('/api/persons/:id', (req:Request, res:Response) => {
 
 app.get('/info', (_req:Request, res: Response) => {
   const totalPeople: number = persons.length;
-  res.send(`<p>Phonebook has info for ${totalPeople}</p><p>${new Date()}<\p>`)
-})
+  const currentDate: Date = new Date();
+  const responseMessage: string = `<p>Phonebook has info for ${totalPeople}</p><p>${currentDate}<\p>`
+
+  res.send(responseMessage)
+});
+
+app.post('/api/persons/', (req, res) => {
+  const {name, number} = req.body;
+
+  if (!name || !number) {
+    res.status(400).json({ error: 'Name and number are required' });
+  }
+
+  const newPerson = {
+    id: uuidv4(),
+    name,
+    number,
+  }
+
+  persons.push(newPerson);
+
+  res.status(201).json(newPerson);
+});
 
 app.delete('/api/persons/:id', (req, res) => {
   const id: number = Number(req.params.id);
   const person = findPersonById(id);
-
-  persons = persons.filter(person => person.id !== id)
-
-  res.json(person);
-})
+  
+  if (person) {
+    persons = persons.filter(p => p.id !== id);
+    res.sendStatus(204);
+  } else {
+    res.status(404).json({ error: 'Person not found' });
+  }
+});
 
 const PORT: number = 3000;
 app.listen(PORT, () => {
