@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import morgan from 'morgan';
+const { v4: uuidv4 } = require('uuid')
 const app = express();
 
 app.use(express.json())
@@ -11,7 +12,7 @@ interface Person {
     number: string
 }
 
-const persons: Person[] = [
+let persons: Person[] = [
   { 
     "id": 1,
     "name": "Arto Hellas", 
@@ -34,13 +35,17 @@ const persons: Person[] = [
   }
 ]
 
+const findPersonById = (id: number) => {
+  return persons.find(person => person.id === id);
+}
+
 app.get('/api/persons', (_req: Request, res: Response) => {
   res.json(persons);
 })
 
 app.get('/api/persons/:id', (req:Request, res:Response) => {
   const id: number = parseInt(req.params.id);
-  const person = persons.find(person => person.id === id);
+  const person = findPersonById(id);
   
   if (person) {
     res.json(person);
@@ -52,6 +57,15 @@ app.get('/api/persons/:id', (req:Request, res:Response) => {
 app.get('/info', (_req:Request, res: Response) => {
   const totalPeople: number = persons.length;
   res.send(`<p>Phonebook has info for ${totalPeople}</p><p>${new Date()}<\p>`)
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id: number = Number(req.params.id);
+  const person = findPersonById(id);
+
+  persons = persons.filter(person => person.id !== id)
+
+  res.json(person);
 })
 
 const PORT: number = 3000;
