@@ -1,7 +1,9 @@
 import express, {Request, Response} from "express";
+import morgan from 'morgan';
 const app = express();
 
 app.use(express.json())
+app.use(morgan('dev'))
 
 interface Person {
     id: number
@@ -35,6 +37,17 @@ const persons: Person[] = [
 app.get('/api/persons', (_req: Request, res: Response) => {
   res.json(persons);
 })
+
+app.get('/api/persons/:id', (req:Request, res:Response) => {
+  const id: number = parseInt(req.params.id);
+  const person = persons.find(person => person.id === id);
+  
+  if (person) {
+    res.json(person);
+  } else {
+    res.status(404).json({ error: 'Person not found' });
+  }
+});
 
 app.get('/info', (_req:Request, res: Response) => {
   const totalPeople: number = persons.length;
