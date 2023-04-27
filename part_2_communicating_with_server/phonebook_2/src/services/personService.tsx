@@ -1,7 +1,7 @@
 import axios from "axios";
 import { INewPerson } from "../styles";
 
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons'
 
 const personService = {
   create: async (newPerson: INewPerson) => {

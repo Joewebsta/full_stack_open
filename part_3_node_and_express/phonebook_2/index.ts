@@ -1,41 +1,45 @@
+import { UUID } from "crypto";
 import express, {Request, Response} from "express";
 import morgan from 'morgan';
-const { v4: uuidv4 } = require('uuid')
+import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors';
 const app = express();
 
-app.use(express.json())
-app.use(morgan('dev'))
+app.use(express.json());
+app.use(express.static('build'));
+app.use(morgan('dev'));
+app.use(cors());
 
 interface Person {
-    id: number
+    id: string | UUID
     name: string
     number: string
 }
 
 let persons: Person[] = [
   { 
-    "id": 1,
+    "id": "1",
     "name": "Arto Hellas", 
     "number": "040-123456"
   },
   { 
-    "id": 2,
+    "id": "2",
     "name": "Ada Lovelace", 
     "number": "39-44-5323523"
   },
   { 
-    "id": 3,
+    "id": "3",
     "name": "Dan Abramov", 
     "number": "12-43-234345"
   },
   { 
-    "id": 4,
+    "id": "4",
     "name": "Mary Poppendieck", 
     "number": "39-23-6423122"
   }
 ]
 
-const findPersonById = (id: number) => {
+const findPersonById = (id: string) => {
   return persons.find(person => person.id === id);
 }
 
@@ -44,7 +48,7 @@ app.get('/api/persons', (_req: Request, res: Response) => {
 });
 
 app.get('/api/persons/:id', (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.id);
+  const id: string = req.params.id;
   const person = findPersonById(id);
   
   if (person) {
@@ -81,7 +85,7 @@ app.post('/api/persons/', (req, res) => {
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id: number = Number(req.params.id);
+  const id: string = req.params.id;
   const person = findPersonById(id);
   
   if (person) {
@@ -92,7 +96,13 @@ app.delete('/api/persons/:id', (req, res) => {
   }
 });
 
-const PORT: number = 3000;
+const unknownEndpoint = (_req: Request, res: Response) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint);
+
+const PORT: number | string = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
-})
+});
