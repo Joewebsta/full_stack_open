@@ -1,68 +1,27 @@
-import React from 'react'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
-import axios from 'axios'
-import { useEffect } from 'react'
-import { getNotes, createNote, updateNote } from './request'
+import axios from "axios"
+import React from "react"
+import { useQuery } from "react-query"
+import { getNotes } from "./requests"
 
 const App = () => {
-  const baseUrl = 'http://localhost:3001/notes'
-  const [notes, setNotes] = React.useState([]);
-  const queryClient = useQueryClient();
-
-  const newNoteMutation = useMutation(async newNote => {
-    const response = await axios.post(baseUrl, newNote);
-    return response.data;
-  }, {
-    onSuccess: (newNote) => {
-      // const notes = queryClient.getQueryData('notes');
-      // queryClient.setQueryData('notes', notes.concat(newNote))
-      queryClient.invalidateQueries('notes')
-    }
-  })
-
-  // const updateNoteMutation = useMutation(updateNote, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries('notes')
-  //   }
-  // })
-
   const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.note.value = ''
-
-    const response = await axios.post('http://localhost:3001/notes', { content, important: false })
-    setNotes(notes.concat(response.data))
-
-
-    // newNoteMutation.mutate({ content, important: true })
     console.log(content)
   }
 
   const toggleImportance = (note) => {
-    // updateNoteMutation.mutate({ ...note, important: !note.important });
+    console.log('toggle importance of', note.id)
   }
 
-  useEffect(() => {
+  const result = useQuery('notes', getNotes);
 
-    async function myFunc() {
-      const axio = await axios.get('http://localhost:3001/notes')
-      const data = axio.data;
+  if (result.isLoading) {
+    return <div>loading data...</div>
+  }
 
-      setNotes(data)
-    }
-    myFunc()
-  }, [])
-
-  // const result = useQuery('notes', getNotes, {
-  //   refetchOnWindowFocus: false
-  // });
-
-  // if (result.isLoading) {
-  //   return <div>loading data...</div>
-  // }
-
-  // const notes = result.data
+  const notes = result.data;
 
   return (
     <div>
