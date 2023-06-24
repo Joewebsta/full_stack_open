@@ -1,7 +1,6 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import Total from './Total';
-
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import Total from "./Total";
 
 it("Renders Total component test", () => {
   const exercises1 = 10;
@@ -9,7 +8,7 @@ it("Renders Total component test", () => {
   const exercises3 = 7;
   const exercises = [exercises1, exercises2, exercises3];
 
-  render(<Total exercises={exercises} />)
-  const totalElement = screen.getByText(/Number of exercises 31/)
+  render(<Total exercises={exercises} />);
+  const totalElement = screen.getByText(/Number of exercises 31/);
   expect(totalElement).toBeInTheDocument();
 });
