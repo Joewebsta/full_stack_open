@@ -2,11 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 import './App.css'
 
+import Header from './components/Header'
+
 function App() {
+  const course = 'Half Stack application development';
 
   return (
     <>
-      <h1>Hello world</h1>
+      <Header course={course} />
     </>
   )
 }
