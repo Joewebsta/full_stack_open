@@ -1,8 +1,10 @@
 import React from "react";
 
-const Total = ({ exercises }) => {
+const Total = ({ parts }) => {
+  console.log("PARTS:", parts);
+
   const calcTotalExercises = () => {
-    return exercises.reduce((sum, exercises) => sum + exercises);
+    return parts.reduce((sum, part) => sum + part.exercises, 0);
   };
 
   return (
