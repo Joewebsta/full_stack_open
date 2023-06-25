@@ -3,7 +3,7 @@ import React from "react";
 const Content = ({ part, exercise }) => {
   return (
     <p>
-      {part} {exercise}
+      <span>{part}</span> <span className="font-bold">{exercise}</span>
     </p>
   );
 };

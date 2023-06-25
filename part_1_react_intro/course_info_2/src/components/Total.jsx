@@ -5,7 +5,12 @@ const Total = ({ exercises }) => {
     return exercises.reduce((sum, exercises) => sum + exercises);
   };
 
-  return <p>Number of exercises {calcTotalExercises()}</p>;
+  return (
+    <p>
+      Number of exercises{" "}
+      <span className="font-bold">{calcTotalExercises()}</span>
+    </p>
+  );
 };
 
 export default Total;

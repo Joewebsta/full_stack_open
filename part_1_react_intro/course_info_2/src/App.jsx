@@ -9,22 +9,18 @@ function App() {
   const exercises1 = 10;
   const part2 = "Using props to pass data";
   const exercises2 = 7;
-
-
-
-  const part3 = 'State of a component';
+  const part3 = "State of a component";
   const exercises3 = 14;
 
   return (
     <>
-      <button className="bg-sky-700 px-4 py-2 text-slate-950 hover:bg-sky-800 sm:px-8 sm:py-3">
-        HELLO
-      </button>
-      <Header course={course} />
-      <Content part={part1} exercise={exercises1} />
-      <Content part={part2} exercise={exercises2} />
-      <Content part={part3} exercise={exercises3} />
-      <Total exercises={[exercises1, exercises2, exercises3]} />
+      <div className="container mx-auto my-10 flex max-w-xl flex-col gap-3 rounded border border-gray-300 p-3">
+        <Header course={course} />
+        <Content part={part1} exercise={exercises1} />
+        <Content part={part2} exercise={exercises2} />
+        <Content part={part3} exercise={exercises3} />
+        <Total exercises={[exercises1, exercises2, exercises3]} />
+      </div>
     </>
   );
 }
