@@ -1,6 +1,9 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-it("should pass", () => {
-  expect(1).toBe(1);
+it("Renders app component", () => {
+  render(<App />);
+  const header = screen.getByText("Half Stack application development");
+  expect(header).toBeInTheDocument();
 });

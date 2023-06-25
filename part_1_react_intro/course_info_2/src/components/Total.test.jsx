@@ -7,7 +7,7 @@ const exercises2 = 14;
 const exercises3 = 7;
 const exercises = [exercises1, exercises2, exercises3];
 
-it("Renders Total component test", () => {
+it("Renders Total component", () => {
   render(<Total exercises={exercises} />);
   const totalElement = screen.getByText(/Number of exercises/i);
   expect(totalElement).toBeInTheDocument();

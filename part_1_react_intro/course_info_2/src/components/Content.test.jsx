@@ -6,7 +6,7 @@ it("Renders Content component text", () => {
   const part = "Fundamentals of React";
   const exercise = 10;
 
-  render(<Content part={part} exercise={exercise} />);
+  render(<Content parts={[part]} exercises={[exercise]} />);
 
   const contentElement = screen.getByText(/Fundamentals of React/);
   expect(contentElement).toBeInTheDocument();
