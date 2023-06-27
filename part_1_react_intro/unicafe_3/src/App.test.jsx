@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { screen, render } from "@testing-library/react";
 import App from "./App";
 
-it("Test", () => {
-  expect(1).toBe(1);
+it("renders app component", () => {
+  render(<App />);
+  expect(screen.getByText("give feedback")).toBeInTheDocument();
+  expect(screen.getByText("statistics")).toBeInTheDocument();
 });
