@@ -1,6 +1,8 @@
+import React from "react";
 import { useState } from "react";
 import Header from "./components/Header";
 import Button from "./components/Button";
+import Statistics from "./components/Statistics";
 
 const App = () => {
   const [good, setGood] = useState(0);
@@ -10,10 +12,11 @@ const App = () => {
   return (
     <>
       <Header text={"give feedback"} />
-      <Header text={"statistics"} />
       <Button text={"good"} />
       <Button text={"neutral"} />
       <Button text={"bad"} />
+      <Header text={"statistics"} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   );
 };
