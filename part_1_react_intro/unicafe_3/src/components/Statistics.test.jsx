@@ -4,7 +4,7 @@ import { it, expect } from "vitest";
 import Statistics from "./Statistics";
 
 it("renders Statistics component", () => {
-  render(<Statistics />);
+  render(<Statistics good={0} bad={0} neutral={0} />);
   const element = screen.getByText(/neutral/i);
   expect(element).toBeInTheDocument();
 });
