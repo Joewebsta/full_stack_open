@@ -6,8 +6,8 @@ import userEvent from "@testing-library/user-event";
 
 it("renders app component", () => {
   render(<App />);
-  expect(screen.getByText("give feedback")).toBeInTheDocument();
-  expect(screen.getByText("statistics")).toBeInTheDocument();
+  expect(screen.getByText(/give feedback/i)).toBeInTheDocument();
+  expect(screen.getByText(/statistics/i)).toBeInTheDocument();
 });
 
 it('increments the "good" count when the "good" button is clicked', async () => {

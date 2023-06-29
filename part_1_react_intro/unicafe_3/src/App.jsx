@@ -22,14 +22,20 @@ const App = () => {
   };
 
   return (
-    <>
-      <Header text={"give feedback"} />
-      <Button text={"good"} handleClick={handleGoodButtonClick} />
-      <Button text={"neutral"} handleClick={handleNeutralButtonClick} />
-      <Button text={"bad"} handleClick={handleBadButtonClick} />
-      <Header text={"statistics"} />
-      <Statistics good={good} neutral={neutral} bad={bad} />
-    </>
+    <main className="h-screen bg-gray-200 p-8">
+      <section className="container mx-auto max-w-sm bg-white p-5">
+        <Header text={"Give Feedback"} />
+        <section className="mt-2 flex gap-2">
+          <Button text={"good"} handleClick={handleGoodButtonClick} />
+          <Button text={"neutral"} handleClick={handleNeutralButtonClick} />
+          <Button text={"bad"} handleClick={handleBadButtonClick} />
+        </section>
+        <section className="mt-5">
+          <Header text={"Statistics"} />
+          <Statistics good={good} neutral={neutral} bad={bad} />
+        </section>
+      </section>
+    </main>
   );
 };
 
