@@ -1,15 +1,21 @@
 import React from "react";
 import { useState } from "react";
 import "./App.css";
+import Header from "./components/Header";
+import NewNumberForm from "./components/NewNumberForm";
+import Numbers from "./components/Numbers";
 
-function App() {
-  const [count, setCount] = useState(0);
+const App = () => {
+  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [newName, setNewName] = useState("");
 
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <main className="mx-auto max-w-md p-5">
+      <Header />
+      <NewNumberForm />
+      <Numbers />
+    </main>
   );
-}
+};
 
 export default App;
