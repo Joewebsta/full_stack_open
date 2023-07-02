@@ -1,10 +1,21 @@
 import React from "react";
+import { useState } from "react";
 
-const NewNumberForm = () => {
+const NewNumberForm = ({ handleAddPerson }) => {
+  const [newName, setNewName] = useState("");
+
+  const handleAddNumber = (event) => {
+    event.preventDefault();
+    handleAddPerson(newName);
+    setNewName("");
+  };
+
+  const handleOnChange = (e) => setNewName(e.target.value);
+
   return (
     <>
       <section className="bg-lime-200 p-5">
-        <form>
+        <form onSubmit={handleAddNumber}>
           <div>
             <label
               htmlFor="name"
@@ -17,8 +28,10 @@ const NewNumberForm = () => {
               className="block w-60 rounded-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600"
               id="name"
               name="name"
+              onChange={handleOnChange}
               placeholder="Enter a name"
               type="text"
+              value={newName}
             />
           </div>
           <div>

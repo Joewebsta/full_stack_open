@@ -7,13 +7,16 @@ import Numbers from "./components/Numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
-  const [newName, setNewName] = useState("");
+
+  const handleAddPerson = (name) => {
+    setPersons([...persons, { name }]);
+  };
 
   return (
     <main className="mx-auto max-w-md p-5">
       <Header />
-      <NewNumberForm />
-      <Numbers />
+      <NewNumberForm handleAddPerson={handleAddPerson} />
+      <Numbers persons={persons} />
     </main>
   );
 };
