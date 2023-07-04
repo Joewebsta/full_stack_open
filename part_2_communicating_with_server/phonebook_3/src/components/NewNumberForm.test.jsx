@@ -18,7 +18,7 @@ test("updates name state on input change", async () => {
   expect(nameInput).toHaveValue("Joe");
 });
 
-test("calls onSubmit when add number button is clicked", async () => {
+test("calls onSubmit when 'add number' button is clicked", async () => {
   const mockFunction = vi.fn();
   render(<NewNumberForm handleAddPerson={mockFunction} />);
   const user = userEvent.setup();
@@ -26,4 +26,18 @@ test("calls onSubmit when add number button is clicked", async () => {
   await user.click(buttonElement);
   // expect(mockFunction).toHaveBeenCalled();
   expect(mockFunction.mock.calls.length).toBe(1);
+});
+
+test("onSubmit is called with new name", async () => {
+  const mockFunction = vi.fn();
+  render(<NewNumberForm handleAddPerson={mockFunction} />);
+
+  const nameInput = screen.getByRole("textbox", { name: "Name:" });
+  const addNumberButton = screen.getByRole("button", { name: "Add number" });
+
+  const user = userEvent.setup();
+  await user.type(nameInput, "Joe");
+  await user.click(addNumberButton);
+
+  expect(mockFunction.mock.calls[0][0]).toEqual("Joe");
 });
