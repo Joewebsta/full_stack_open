@@ -14,7 +14,7 @@ const App = () => {
   return (
     <main className="mx-auto max-w-md p-5">
       <Header />
-      <NewNumberForm handleAddPerson={handleAddPerson} />
+      <NewNumberForm handleAddPerson={handleAddPerson} persons={persons} />
       <Numbers persons={persons} />
     </main>
   );

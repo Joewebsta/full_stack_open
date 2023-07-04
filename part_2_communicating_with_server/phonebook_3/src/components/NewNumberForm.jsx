@@ -1,13 +1,22 @@
 import React from "react";
 import { useState } from "react";
 
-const NewNumberForm = ({ handleAddPerson }) => {
+const NewNumberForm = ({ handleAddPerson, persons }) => {
   const [newName, setNewName] = useState("");
+
+  const isValidName = () => {
+    return persons.map((person) => person.name).includes(newName);
+  };
 
   const handleAddNumber = (event) => {
     event.preventDefault();
-    handleAddPerson(newName);
-    setNewName("");
+
+    if (!isValidName()) {
+      handleAddPerson(newName);
+      setNewName("");
+    } else {
+      alert(`${newName} is already added to the phonebook.`);
+    }
   };
 
   const handleOnChange = (e) => setNewName(e.target.value);
