@@ -1,4 +1,4 @@
-import parseArguments from './utils';
+import parseArguments from '../utils';
 
 interface Result {
   periodLength: number,
