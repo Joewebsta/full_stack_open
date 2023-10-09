@@ -5,7 +5,11 @@ type BmiCategory =
   | "Obese"
   | "Severely Obese";
 
-function calculateBmi(height: number, weight: number): BmiCategory {
+function parseArguments(args: string[]) {
+  return args.slice(2, 4).map((arg) => Number(arg));
+}
+function calculateBmi(args: string[]): BmiCategory {
+  const [height, weight] = parseArguments(args);
   const heightInMetersSquared = Math.pow(height / 100, 2);
   const bmi = weight / heightInMetersSquared;
 
@@ -28,4 +32,4 @@ function calculateBmi(height: number, weight: number): BmiCategory {
   return "Severely Obese";
 }
 
-console.log(calculateBmi(180, 74));
+console.log(calculateBmi(process.argv));
