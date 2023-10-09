@@ -1,58 +1,22 @@
-interface Result {
-  periodLength: number;
-  trainingDays: number;
-  success: boolean;
-  rating: number;
-  ratingDescription: string;
-  target: number;
-  average: number;
-}
+import { createRating, createRatingDescription } from "./utils/rating";
+import {
+  countNonZeroExerciseDays,
+  calculateAverageDailyExerciseHours,
+  parseArguments,
+} from "./utils/utils";
 
-function countNonZeroExerciseDays(dailyExerciseHours: number[]): number {
-  return dailyExerciseHours.filter((day) => day > 0).length;
-}
+import { Result } from "./types";
 
-function calculateAverageDailyExerciseHours(
-  dailyExerciseHours: number[]
-): number {
-  if (!dailyExerciseHours.length) return 0;
-
-  const hoursSum = dailyExerciseHours.reduce((sum, num) => sum + num, 0);
-  const totalDays = dailyExerciseHours.length;
-  return hoursSum / totalDays;
-}
-
-function createRating(target: number, average: number): number {
-  const rating1Ceiling = target / 2;
-  const rating2Ceiling = target;
-
-  if (average < rating1Ceiling) {
-    return 1;
+function calculateExercises(args: string[]): Result {
+  if (args.length <= 2) {
+    throw new Error("Please provide daily target and daily exercise hours.");
   }
 
-  if (average < rating2Ceiling) {
-    return 2;
+  if (args.length === 3) {
+    throw new Error("Please provide daily exercise hours.");
   }
 
-  return 3;
-}
-
-function createRatingDescription(rating: number): string {
-  switch (rating) {
-    case 1:
-      return "You have a lot more work to do.";
-    case 2:
-      return "Not too bad but could be better";
-    default:
-      return "You met your target!";
-  }
-}
-
-function calculateExercises(
-  dailyExerciseHours: number[],
-  dailyExerciseTarget: number
-): Result {
-  const target = dailyExerciseTarget;
+  const [target, ...dailyExerciseHours] = parseArguments(args);
   const periodLength = dailyExerciseHours.length;
   const trainingDays = countNonZeroExerciseDays(dailyExerciseHours);
   const average = calculateAverageDailyExerciseHours(dailyExerciseHours);
@@ -71,6 +35,10 @@ function calculateExercises(
   };
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
-calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2);
-
+try {
+  console.log(calculateExercises(process.argv));
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(`Error: ${error.message}`);
+  }
+}

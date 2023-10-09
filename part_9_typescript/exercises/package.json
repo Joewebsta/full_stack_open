@@ -6,7 +6,7 @@
   "scripts": {
     "ts-node": "ts-node",
     "calculateBmi": "ts-node calculateBmi.ts",
-    "calculateExercises": "ts-node calculateExercises",
+    "calculateExercises": "ts-node ./src/calculateExercises2",
     "start": "ts-node index.ts",
     "dev": "ts-node-dev index.ts",
     "lint": "eslint --ext .ts ."
