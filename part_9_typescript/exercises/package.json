@@ -7,8 +7,10 @@
     "ts-node": "ts-node",
     "calculateBmi": "ts-node calculateBmi.ts",
     "calculateExercises": "ts-node ./src/calculateExercises2",
+    "multiply": "ts-node multiplier.ts",
+    "calculate": "ts-node calculator.ts",
     "start": "ts-node index.ts",
-    "dev": "ts-node-dev index.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "lint": "eslint --ext .ts ."
   },
   "author": "",

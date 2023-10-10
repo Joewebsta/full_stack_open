@@ -1,15 +1,8 @@
-type BmiCategory =
-  | "Underweight"
-  | "Normal (healthy weight)"
-  | "Overweight"
-  | "Obese"
-  | "Severely Obese";
+import { BmiCategory } from "./types";
 
-function parseArguments(args: string[]) {
-  return args.slice(2, 4).map((arg) => Number(arg));
-}
-function calculateBmi(args: string[]): BmiCategory {
-  const [height, weight] = parseArguments(args);
+export function calculateBmi(height: number, weight: number): BmiCategory {
+  if (!height || !weight) throw new Error("Please provide height and weight");
+
   const heightInMetersSquared = Math.pow(height / 100, 2);
   const bmi = weight / heightInMetersSquared;
 
@@ -32,4 +25,4 @@ function calculateBmi(args: string[]): BmiCategory {
   return "Severely Obese";
 }
 
-console.log(calculateBmi(process.argv));
+// console.log(calculateBmi(process.argv));
