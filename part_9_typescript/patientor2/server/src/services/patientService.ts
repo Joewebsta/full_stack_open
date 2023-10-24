@@ -1,4 +1,4 @@
-import { Patient, NonSensitivePatient } from "../types";
+import { Patient, NonSensitivePatient, NewPatient } from "../types";
 import patientData from "../../data/patients";
 const { v4: uuidv4 } = require("uuid");
 
@@ -18,8 +18,11 @@ export function getNonSensitivePatients(): NonSensitivePatient[] {
   });
 }
 
-export function addPatient(newPatient: Patient): Patient {
-  newPatient.id = uuidv4();
+export function addPatient(patient: NewPatient): Patient {
+  const newPatient = {
+    id: uuidv4(),
+    ...patient,
+  };
   patientData.push(newPatient);
   return newPatient;
 }
